@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node (frontend/ has its own .gitignore too)
+node_modules/
+
+# Data: recordings and downloaded corpora stay local, only the docs and
+# small annotation files are versioned.
+data/raw/
+data/corpus/
+data/processed/
+*.wav
+*.flac
+*.mp3
+
+# Models and experiment outputs
+ml/runs/
+*.pt
+*.ckpt
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
