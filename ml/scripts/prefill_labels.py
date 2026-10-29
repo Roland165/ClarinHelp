@@ -15,6 +15,7 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
+from clarinhelp.labels import write_labels
 from clarinhelp.notes import segment_notes
 from clarinhelp.pitch import concert_to_written, hz_to_midi, midi_to_name
 from clarinhelp.yin import track
@@ -44,7 +45,5 @@ for wav in args.wavs:
     level_db = 20 * np.log10(np.maximum(rms, 1e-6))
     notes = segment_notes(times, written, level_db)
 
-    with open(out_path, "w", encoding="utf-8", newline="\n") as f:
-        for start, end, midi in notes:
-            f.write(f"{start:.3f}\t{end:.3f}\t{midi_to_name(midi)}\n")
+    write_labels(out_path, [(start, end, midi_to_name(midi)) for start, end, midi in notes])
     print(f"{out_path}: {len(notes)} notes")
