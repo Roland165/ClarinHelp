@@ -53,7 +53,10 @@ system was tuned on.
 
 ### 1. Chromatic scale (pitch accuracy)
 
-Written E3 up to C6, one note per beat at ♩ = 60, each note held for the whole beat.
+Written E3 up to C6, one note per beat at ♩ = 60, each note held for the whole beat,
+at a comfortable volume (mezzo-forte). Breathe whenever needed: leave one beat of
+silence, breathe, and go on with the next note. Silences are fine, they are annotated
+like everything else.
 
 - `scale_chromatic_01.wav`, `scale_chromatic_02.wav` (2 takes)
 
