@@ -26,6 +26,12 @@ main {
   background: #3a9d5d;
 }
 
+.frequency {
+  font-size: 3rem;
+  font-variant-numeric: tabular-nums;
+  margin: 1.5rem 0 0;
+}
+
 .error {
   color: #d33;
 }
