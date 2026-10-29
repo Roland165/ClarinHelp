@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { startPitchTracker, type PitchFrame } from './audio/mic'
+import { Tuner } from './components/Tuner'
 
 // Anything quieter than -60 dB is shown as an empty bar.
 const SILENCE_DB = -60
@@ -43,9 +44,7 @@ function App() {
       </button>
       {error && <p className="error">Could not open the microphone: {error}</p>}
 
-      <p className="frequency">
-        {frame?.frequency ? `${frame.frequency.toFixed(1)} Hz` : '–'}
-      </p>
+      <Tuner frequency={frame?.frequency ?? null} />
 
       <div className="meter">
         <div className="meter-fill" style={{ width: `${fill}%` }} />

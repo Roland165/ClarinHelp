@@ -26,10 +26,73 @@ main {
   background: #3a9d5d;
 }
 
-.frequency {
-  font-size: 3rem;
+.tuner {
+  --tuning-color: #888;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.tuner.in-tune {
+  --tuning-color: #2e9e5b;
+}
+
+.tuner.close {
+  --tuning-color: #e0a100;
+}
+
+.tuner.off {
+  --tuning-color: #d64545;
+}
+
+.tuner-note {
+  font-size: 5rem;
+  font-weight: 600;
+  color: var(--tuning-color);
+}
+
+.tuner-details {
+  margin-top: 0.75rem;
   font-variant-numeric: tabular-nums;
-  margin: 1.5rem 0 0;
+  opacity: 0.8;
+}
+
+.needle-scale {
+  position: relative;
+  height: 3rem;
+  border-bottom: 2px solid #888;
+}
+
+.needle-center {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 2px;
+  height: 100%;
+  background: #888;
+}
+
+.needle {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 100%;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: var(--tuning-color);
+}
+
+.needle-label {
+  position: absolute;
+  top: 0;
+  font-size: 1.5rem;
+}
+
+.needle-label.left {
+  left: 0;
+}
+
+.needle-label.right {
+  right: 0;
 }
 
 .error {
