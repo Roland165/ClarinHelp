@@ -14,9 +14,9 @@ played by a real (beginner-level) player.
 
 ## Repertoire
 
-12 public-domain tunes, beginner range (written G3 to C6). The scores used for
-recording are in `data/scores/` (added before the recording session), so that
-what is played matches what the app expects note for note.
+12 public-domain tunes, beginner range (written E3 to F5, mostly below the break).
+The scores used for recording are in `data/scores/`, in ABC notation, written pitch
+for B♭ clarinet, so that what is played matches what the app expects note for note.
 
 | id | Tune | Split |
 |---|---|---|
@@ -28,9 +28,9 @@ what is played matches what the app expects note for note.
 | `saints` | When the Saints Go Marching In | test |
 | `amazing_grace` | Amazing Grace | test |
 | `greensleeves` | Greensleeves | test |
-| `scarborough` | Scarborough Fair | test |
-| `oh_susanna` | Oh! Susanna | test |
-| `brahms_lullaby` | Brahms' Lullaby | test |
+| `mary_lamb` | Mary Had a Little Lamb | test |
+| `row_boat` | Row, Row, Row Your Boat | test |
+| `silent_night` | Silent Night | test |
 | `auld_lang_syne` | Auld Lang Syne | test |
 
 **The split is by tune, fixed before recording.** Every threshold and parameter is
