@@ -9,3 +9,10 @@ uv sync          # creates .venv with the pinned Python and dependencies
 uv run pytest    # tests
 uv run ruff check .
 ```
+
+Scripts:
+
+```bash
+# pitch curve found by YIN in a recording, saved in runs/
+uv run python scripts/plot_pitch.py ../data/raw/scale_chromatic_01.wav
+```
