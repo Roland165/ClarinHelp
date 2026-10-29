@@ -1,0 +1,11 @@
+X:1
+T:Silent Night (errors take)
+%%written pitch for B-flat clarinet
+%%notes actually played in the errors take, mistakes marked above the staff
+M:3/4
+L:1/4
+Q:1/4=72
+K:C
+G3/2 A/ G | "^wrong"F3 | G3/2 A/ G | E3 | d2 d | B2 "^extra"c | c2 c | G3 |
+A2 A | c3/2 "^skipped B"z/ A | G3/2 A/ G | E3 | A2 A | c3/2 B/ A | G3/2 A/ G | E3 |
+d2 d | "^wrong"e3/2 d/ B | c3 | e3 | c G E | G3/2 F/ D | C3- | C3 |]

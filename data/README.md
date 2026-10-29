@@ -68,10 +68,11 @@ For **each** of the 12 tunes:
 |---|---|---|
 | clean | `<id>_clean_01.wav` | As written, with a metronome, at the tempo on the score |
 | free | `<id>_free_01.wav` | No metronome, noticeably slower or faster, with some rubato |
-| errors | `<id>_errors_01.wav` | 3 to 5 **deliberate** mistakes: wrong notes, one skipped note, one extra note. Write down what you did and where (see below) |
+| errors | `<id>_errors_01.wav` | 3 to 5 **deliberate** mistakes: wrong notes, one skipped note, one extra note. Play them from `data/scores/errors/<id>.abc`, where every mistake is marked above the staff; they are also listed in `recordings.csv` |
 
 For 4 tunes only (2 val, 2 test): one more take in **another key**,
-`<id>_transposed_01.wav`, for example a whole tone higher. Write down the interval.
+`<id>_transposed_01.wav`, a whole tone higher (+2), with the same metronome tempo
+as the clean take. Play it from `data/scores/transposed/<id>.abc`.
 
 That makes 2 + 12 × 3 + 4 = **42 files**, roughly 30 minutes of audio.
 

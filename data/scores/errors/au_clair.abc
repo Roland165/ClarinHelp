@@ -1,0 +1,10 @@
+X:1
+T:Au clair de la lune (errors take)
+%%written pitch for B-flat clarinet
+%%notes actually played in the errors take, mistakes marked above the staff
+M:4/4
+L:1/4
+Q:1/4=100
+K:C
+C C C D | E2 D2 | C E/"^extra"E/ D D | C4 | C C C D | E2 D2 | "^wrong"B, E D D | C4 |
+D D D D | A,2 A,2 | D C B, A, | G,4 | C C C "^skipped D"z | E2 D2 | C E D D | C4 |]

@@ -1,3 +1,43 @@
 file,tune,take,tempo_bpm,transposition,notes
 scale_chromatic_01.wav,scale_chromatic,scale,60,0,
 scale_chromatic_02.wav,scale_chromatic,scale,60,0,
+au_clair_clean_01.wav,au_clair,clean,100,0,
+au_clair_free_01.wav,au_clair,free,,0,
+au_clair_errors_01.wav,au_clair,errors,100,0,"bar 3: extra E after E; bar 7: B3 instead of C; bar 13: skipped D"
+au_clair_transposed_01.wav,au_clair,transposed,100,+2,
+frere_jacques_clean_01.wav,frere_jacques,clean,100,0,
+frere_jacques_free_01.wav,frere_jacques,free,,0,
+frere_jacques_errors_01.wav,frere_jacques,errors,100,0,"bar 2: F instead of E; bar 4: skipped F; bar 6: extra D after E; bar 7: A3 instead of G3"
+twinkle_clean_01.wav,twinkle,clean,100,0,
+twinkle_free_01.wav,twinkle,free,,0,
+twinkle_errors_01.wav,twinkle,errors,100,0,"bar 2 beat 2: B instead of A; bar 5 beat 2: extra A after G; bar 8: skipped D; bar 11 beat 3: D instead of E"
+twinkle_transposed_01.wav,twinkle,transposed,100,+2,
+jingle_bells_clean_01.wav,jingle_bells,clean,120,0,
+jingle_bells_free_01.wav,jingle_bells,free,,0,
+jingle_bells_errors_01.wav,jingle_bells,errors,120,0,"bar 3: A instead of G; bar 7 beat 2: skipped D; bar 11: extra F after G; bar 15: E instead of D"
+ode_to_joy_clean_01.wav,ode_to_joy,clean,100,0,
+ode_to_joy_free_01.wav,ode_to_joy,free,,0,
+ode_to_joy_errors_01.wav,ode_to_joy,errors,100,0,"bar 2: A instead of G; bar 6: skipped E; bar 9: extra F after E; bar 12: A3 instead of G3"
+ode_to_joy_transposed_01.wav,ode_to_joy,transposed,100,+2,
+saints_clean_01.wav,saints,clean,110,0,
+saints_free_01.wav,saints,free,,0,
+saints_errors_01.wav,saints,errors,110,0,"bar 3: D instead of E; bar 7: skipped E; bar 10: extra D after C; bar 14: A instead of G"
+saints_transposed_01.wav,saints,transposed,110,+2,
+amazing_grace_clean_01.wav,amazing_grace,clean,80,0,
+amazing_grace_free_01.wav,amazing_grace,free,,0,
+amazing_grace_errors_01.wav,amazing_grace,errors,80,0,"bar 3: F instead of E; bar 7: extra E after D; bar 12: skipped A3; bar 15: C instead of D"
+greensleeves_clean_01.wav,greensleeves,clean,60,0,
+greensleeves_free_01.wav,greensleeves,free,,0,
+greensleeves_errors_01.wav,greensleeves,errors,60,0,"bar 2: skipped D; bar 5: A3 instead of G#3; bar 11: extra E after D; bar 14 beat 1: A instead of G"
+mary_lamb_clean_01.wav,mary_lamb,clean,100,0,
+mary_lamb_free_01.wav,mary_lamb,free,,0,
+mary_lamb_errors_01.wav,mary_lamb,errors,100,0,"bar 1: B3 instead of C; bar 3 beat 2: skipped D; bar 4 beat 2: extra A after G; bar 7: F instead of E"
+row_boat_clean_01.wav,row_boat,clean,60,0,
+row_boat_free_01.wav,row_boat,free,,0,
+row_boat_errors_01.wav,row_boat,errors,60,0,"bar 2: skipped D; bar 3: C instead of D; bar 4: extra A after G; bar 7: E instead of F"
+auld_lang_syne_clean_01.wav,auld_lang_syne,clean,80,0,
+auld_lang_syne_free_01.wav,auld_lang_syne,free,,0,
+auld_lang_syne_errors_01.wav,auld_lang_syne,errors,80,0,"bar 4: F instead of E; bar 6: skipped C; bar 9: extra B after A; bar 13: B4 instead of C5"
+silent_night_clean_01.wav,silent_night,clean,72,0,
+silent_night_free_01.wav,silent_night,free,,0,
+silent_night_errors_01.wav,silent_night,errors,72,0,"bar 2: F instead of E; bar 6: extra C5 after B; bar 10: skipped B; bar 18: E5 instead of F5"

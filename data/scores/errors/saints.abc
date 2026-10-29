@@ -1,0 +1,10 @@
+X:1
+T:When the Saints Go Marching In (errors take)
+%%written pitch for B-flat clarinet
+%%notes actually played in the errors take, mistakes marked above the staff
+M:4/4
+L:1/4
+Q:1/4=110
+K:C
+z C E F | G4 | z C "^wrong"D F | G4 | z C E F | G2 E2 | C2 "^skipped E"z2 | D4 |
+z E E D | C2 "^extra"D C | E2 G2 | G2 F2- | F2 E F | "^wrong"A2 E2 | C2 D2 | C4 |]

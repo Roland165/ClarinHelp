@@ -1,0 +1,10 @@
+X:1
+T:Auld Lang Syne (errors take)
+%%written pitch for B-flat clarinet
+%%notes actually played in the errors take, mistakes marked above the staff
+M:4/4
+L:1/4
+Q:1/4=80
+K:C
+z3 G, | C3/2 C/ C E | D3/2 C/ D E | C3/2 C/ "^wrong"F G | A3 A | G3/2 E/ E "^skipped C"z | D3/2 C/ D E | C3/2 A,/ A, G, | C3 A/"^extra"B/ |
+G3/2 E/ E C | D3/2 C/ D A | G3/2 E/ E G | A3 "^wrong"B | G3/2 E/ E C | D3/2 C/ D E | C3/2 A,/ A, G, | C4 |]
