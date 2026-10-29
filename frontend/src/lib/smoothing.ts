@@ -1,9 +1,5 @@
-import { toDb } from './level'
+import { LevelGate, toDb } from './level'
 import { hzToMidi, midiToHz } from './pitch'
-
-// Below this level we consider the player is not playing (room noise, breath).
-// To be checked against real recordings with the USB mic.
-export const SILENCE_DB = -50
 
 // Median over the last 3 frames (~65 ms): a single wrong frame (octave jump,
 // attack noise) is outvoted by its two neighbours.
@@ -27,13 +23,16 @@ export class PitchSmoother {
   private recent: number[] = []
   private smoothedMidi: number | null = null
   private silentFrames = 0
+  private gate = new LevelGate()
 
   push({ frequency, rms }: Frame): number | null {
-    const playing = frequency !== null && toDb(rms) > SILENCE_DB
+    const db = toDb(rms)
+    this.gate.update(db, frequency !== null)
+    const playing = frequency !== null && db > this.gate.gateDb
 
     if (!playing) {
       this.silentFrames++
-      if (this.silentFrames > HOLD_FRAMES) this.reset()
+      if (this.silentFrames > HOLD_FRAMES) this.forgetNote()
       return this.current()
     }
     this.silentFrames = 0
@@ -52,7 +51,17 @@ export class PitchSmoother {
     return this.current()
   }
 
+  /** Current silence threshold in dB, for display. */
+  get gateDb(): number {
+    return this.gate.gateDb
+  }
+
   reset() {
+    this.forgetNote()
+    this.gate.reset()
+  }
+
+  private forgetNote() {
     this.recent = []
     this.smoothedMidi = null
   }

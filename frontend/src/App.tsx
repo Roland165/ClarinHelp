@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { startPitchTracker, type PitchFrame } from './audio/mic'
 import { Tuner } from './components/Tuner'
 import { toDb } from './lib/level'
-import { PitchSmoother, SILENCE_DB } from './lib/smoothing'
+import { PitchSmoother } from './lib/smoothing'
 
 // The level bar goes from -60 dB (empty) to 0 dB (full).
 const METER_FLOOR_DB = -60
@@ -15,6 +15,7 @@ function App() {
   const [listening, setListening] = useState(false)
   const [frame, setFrame] = useState<PitchFrame | null>(null)
   const [frequency, setFrequency] = useState<number | null>(null)
+  const [gateDb, setGateDb] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   const stopMic = useRef<(() => void) | null>(null)
   const smoother = useRef(new PitchSmoother())
@@ -22,6 +23,7 @@ function App() {
   function onFrame(raw: PitchFrame) {
     setFrame(raw)
     setFrequency(smoother.current.push(raw))
+    setGateDb(smoother.current.gateDb)
   }
 
   async function start() {
@@ -41,6 +43,7 @@ function App() {
     setListening(false)
     setFrame(null)
     setFrequency(null)
+    setGateDb(null)
   }
 
   const db = toDb(frame?.rms ?? 0)
@@ -59,10 +62,14 @@ function App() {
       <div className="meter">
         <div className="meter-fill" style={{ width: `${meterPercent(db)}%` }} />
         {/* Under this mark the tuner treats the sound as silence. */}
-        <div className="meter-gate" style={{ left: `${meterPercent(SILENCE_DB)}%` }} />
+        {gateDb !== null && (
+          <div className="meter-gate" style={{ left: `${meterPercent(gateDb)}%` }} />
+        )}
       </div>
       <p>
-        {listening ? `${db.toFixed(0)} dB · confidence ${frame?.confidence.toFixed(2) ?? '–'}` : '–'}
+        {listening
+          ? `${db.toFixed(0)} dB · threshold ${gateDb?.toFixed(0) ?? '–'} dB · confidence ${frame?.confidence.toFixed(2) ?? '–'}`
+          : '–'}
       </p>
     </main>
   )
