@@ -9,7 +9,7 @@ export const SILENCE_DB = -50
 // attack noise) is outvoted by its two neighbours.
 const MEDIAN_SIZE = 3
 // Exponential smoothing for the needle: 0 = frozen, 1 = no smoothing.
-const ALPHA = 0.35
+const ALPHA = 0.25
 // Keep showing the last note through short gaps (~250 ms), e.g. a quick breath.
 const HOLD_FRAMES = 12
 
