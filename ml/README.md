@@ -15,4 +15,10 @@ Scripts:
 ```bash
 # pitch curve found by YIN in a recording, saved in runs/
 uv run python scripts/plot_pitch.py ../data/raw/scale_chromatic_01.wav
+
+# annotation labels of every recording, from its score (see data/README.md)
+uv run python scripts/prefill_labels.py
+
+# compare label files with the scores (useful after editing labels by hand)
+uv run python scripts/check_labels.py
 ```

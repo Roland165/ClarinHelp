@@ -14,7 +14,7 @@ from pathlib import Path
 from clarinhelp.align import align
 from clarinhelp.labels import read_labels
 from clarinhelp.pitch import midi_to_name
-from clarinhelp.scores import SCALE_NOTES, score_notes, score_path
+from clarinhelp.scores import expected_notes
 
 DATA = Path("../data")
 
@@ -31,17 +31,14 @@ for row in recordings:
     if (args.names and name not in args.names) or not labels_path.exists():
         continue
 
-    if row["tune"] == "scale_chromatic":
-        expected = [(None, midi) for midi in SCALE_NOTES]
-    else:
-        expected = score_notes(score_path(DATA / "scores", row["tune"], row["take"]))
-    expected_names = [midi_to_name(midi) for _, midi in expected]
+    expected = expected_notes(DATA / "scores", row["tune"], row["take"])
+    expected_names = [midi_to_name(note.midi) for note in expected]
     labels = read_labels(labels_path)
 
     issues = []
     last_time = 0.0
     for i, j in align(expected_names, [label for _, _, label in labels]):
-        bar = f"bar {expected[i][0]}" if i is not None and expected[i][0] else ""
+        bar = f"bar {expected[i].bar}" if i is not None and expected[i].bar else ""
         if i is not None and j is not None:
             start, end, label = labels[j]
             if label != expected_names[i]:

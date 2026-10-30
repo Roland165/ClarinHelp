@@ -118,8 +118,16 @@ as text (`File > Export > Export Labels`), one line per note:
 
 Columns: start (s), end (s), **written** note name.
 
-To save time, a script will pre-fill these labels from the score and the
-transcription, and you only correct them in Audacity, listening and looking at the
-spectrogram. The pre-filling
-could bias the labels towards the system's output, so every label must be checked
-by ear, not just accepted.
+The labels are made by **forced alignment**: the notes played are known (the
+score of the take, played as written, which was checked), only their timing is
+not. `ml/scripts/prefill_labels.py` finds the sounding segments with YIN, matches
+them to the score and splits merged repeated notes at the dip in level caused by
+the tonguing. So:
+
+- note names and order come from the score: they are exact;
+- start and end times come from the audio: a few files are checked by ear in
+  Audacity (`File > Import > Labels`) to know how precise they are.
+
+Note-level metrics (right notes, pitch in cents) can trust these labels. Timing
+metrics (onset precision) must take their margin of error into account, since the
+times come from the same pitch detector the app uses.

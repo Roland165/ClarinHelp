@@ -14,14 +14,14 @@ def test_score_path_per_take():
 def test_au_clair_starts_c_c_c_d():
     notes = score_notes(SCORES / "au_clair.abc")
     assert len(notes) == 44
-    assert notes[:4] == [(1, 60), (1, 60), (1, 60), (1, 62)]
-    assert notes[-1] == (16, 60)
+    assert notes[:4] == [(1, 60, 1), (1, 60, 1), (1, 60, 1), (1, 62, 1)]
+    assert notes[-1] == (16, 60, 4)
 
 
 def test_tied_note_counted_once():
-    # Silent Night ends on a C4 tied over the last two bars.
+    # Silent Night ends on a C4 held for two bars of 3/4 (tied).
     notes = score_notes(SCORES / "silent_night.abc")
-    assert notes[-1] == (23, 60)
+    assert notes[-1] == (23, 60, 6)
 
 
 def test_labels_round_trip(tmp_path):

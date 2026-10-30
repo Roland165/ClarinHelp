@@ -9,6 +9,12 @@ def test_wrong_note():
     assert align("CDE", "CFE") == [(0, 0), (1, 1), (2, 2)]
 
 
+def test_no_substitution():
+    # D is missing and F is extra, never "F instead of D".
+    pairs = align("CDE", "CFE", substitution_cost=3)
+    assert sorted(pairs, key=str) == sorted([(0, 0), (1, None), (None, 1), (2, 2)], key=str)
+
+
 def test_missing_note():
     assert align("CDEF", "CEF") == [(0, 0), (1, None), (2, 1), (3, 2)]
 
