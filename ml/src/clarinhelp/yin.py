@@ -5,7 +5,6 @@ offline is what the live tuner actually does.
 """
 
 import numpy as np
-from numpy.lib.stride_tricks import sliding_window_view
 
 # Same framing as the AudioWorklet (frontend/src/audio/pitch-processor.ts).
 FRAME_SIZE = 2048
@@ -19,10 +18,17 @@ def yin(frame, sample_rate, min_frequency=120.0, max_frequency=2200.0, threshold
     tau_max = min(len(frame) // 2, int(np.ceil(sample_rate / min_frequency)))
     window_size = len(frame) - tau_max
 
-    # Step 1: difference function d(tau) = sum (x[j] - x[j + tau])^2.
-    # Row tau of `shifted` is the frame shifted by tau samples.
-    shifted = sliding_window_view(frame, window_size)[: tau_max + 1]
-    diff = np.sum((shifted[0] - shifted) ** 2, axis=1)
+    # Step 1: difference function d(tau) = sum (x[j] - x[j + tau])^2, for j < window_size.
+    # Same values as the double loop of yin.ts, computed faster by expanding the square:
+    # d(tau) = sum x[j]^2 + sum x[j + tau]^2 - 2 * sum x[j] * x[j + tau]
+    # The last sum (a cross-correlation) is computed for every tau at once with an FFT.
+    head = frame[:window_size]
+    energy = np.cumsum(np.concatenate([[0.0], frame**2]))
+    shifted_energy = energy[window_size : window_size + tau_max + 1] - energy[: tau_max + 1]
+    size = 2 ** int(np.ceil(np.log2(len(frame) + window_size)))
+    spectrum = np.fft.rfft(frame, size) * np.conj(np.fft.rfft(head, size))
+    correlation = np.fft.irfft(spectrum, size)[: tau_max + 1]
+    diff = np.maximum(energy[window_size] + shifted_energy - 2 * correlation, 0.0)
 
     # Step 2: cumulative mean normalized difference.
     running_sum = np.cumsum(diff[1:])
