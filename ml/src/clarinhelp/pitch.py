@@ -42,6 +42,11 @@ def midi_to_name(midi: float) -> str:
     return NOTE_NAMES[rounded % 12] + str(rounded // 12 - 1)
 
 
+def name_to_midi(name: str) -> int:
+    """'C4' -> 60, 'C#4' -> 61 (the format of midi_to_name)."""
+    return NOTE_NAMES.index(name[:-1]) + 12 * (int(name[-1]) + 1)
+
+
 def nearest_note(hz: float, a4=A4_HZ) -> tuple[int, float]:
     """Closest equal-tempered note and the deviation in cents (negative = flat)."""
     exact = float(hz_to_midi(hz, a4))

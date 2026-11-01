@@ -7,6 +7,7 @@ from clarinhelp.pitch import (
     hz_to_midi,
     midi_to_hz,
     midi_to_name,
+    name_to_midi,
     nearest_note,
     written_to_concert,
 )
@@ -47,3 +48,8 @@ def test_names():
     assert midi_to_name(60) == "C4"
     assert midi_to_name(61) == "C#4"
     assert midi_to_name(96) == "C7"
+
+
+def test_name_to_midi_round_trip():
+    for midi in range(WRITTEN_LOWEST_MIDI, 97):
+        assert name_to_midi(midi_to_name(midi)) == midi
