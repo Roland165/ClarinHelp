@@ -23,8 +23,28 @@ microphone -> AudioWorklet ( with YIN ) -> smoothing + silence threshold -> tune
   playing level) and holds still during silences, so piano notes still count after a forte.
 
 The pitch and transposition helpers exist in both TypeScript (live app) and Python
-(offline evaluation) and are unit-tested on both sides. Accuracy on real clarinet
-recordings has not been measured yet.
+(offline evaluation) and are unit-tested on both sides.
+
+## Measured on real recordings
+
+I recorded 42 files on my clarinet (2 chromatic scales and 12 folk tunes, each played
+clean, freely, with deliberate mistakes, and 4 of them in another key) and annotated
+every note ([data/README.md](data/README.md)). They are split by tune: 4 tunes for
+validation, 8 kept aside for the final test numbers.
+
+YIN, with the exact settings of the live tuner, compared to
+[CREPE](https://arxiv.org/abs/1802.06182) (a neural pitch tracker, run offline) on
+the sustained part of every note of the validation recordings (16 files, 9,975 frames):
+
+| | |
+|---|---|
+| Frames where YIN and CREPE are more than 50 cents apart (wrong note, octave error) | 0 (largest gap: 20.6 cents) |
+| Median gap between YIN and CREPE | 5.1 cents |
+| Frames within 10 cents | 84.1 % |
+
+CREPE itself is only precise to about 5 cents (measured on pure tones), so the two
+agree within the precision of the reference. Reproduce with
+`uv run python scripts/compare_pitch.py` in `ml/`.
 
 ## Running locally
 

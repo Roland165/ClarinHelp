@@ -28,3 +28,6 @@ ml/runs/
 .idea/
 .DS_Store
 Thumbs.db
+# Word lock and temp files, while a .docx is open
+~$*
+~WRL*.tmp
