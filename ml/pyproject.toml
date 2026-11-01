@@ -10,7 +10,8 @@ dependencies = [
     "music21>=10.5.2",
     "numpy>=2.0",
     "soundfile>=0.14.0",
-    "torch>=2.15.0",
+    "torch==2.11.*",
+    "torchaudio==2.11.*",
     "torchcrepe>=0.0.24",
 ]
 
@@ -24,6 +25,7 @@ dev = [
 # CPU-only PyTorch everywhere: no GPU here, and the default Linux wheels bundle CUDA (GBs).
 [tool.uv.sources]
 torch = { index = "pytorch-cpu" }
+torchaudio = { index = "pytorch-cpu" }
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
