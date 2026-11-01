@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { startPitchTracker, type PitchFrame } from './audio/mic'
+import { Score } from './components/Score'
 import { Tuner } from './components/Tuner'
 import { toDb } from './lib/level'
 import { PitchSmoother } from './lib/smoothing'
@@ -71,6 +72,8 @@ function App() {
           ? `${db.toFixed(0)} dB · threshold ${gateDb?.toFixed(0) ?? '–'} dB · confidence ${frame?.confidence.toFixed(2) ?? '–'}`
           : '–'}
       </p>
+
+      <Score />
     </main>
   )
 }
