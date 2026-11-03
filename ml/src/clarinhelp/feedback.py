@@ -65,13 +65,12 @@ def detect_mistakes(score, played):
         return played[j][1] - played[j][0]
 
     matched = {i: j for i, j in pairs if i is not None and j is not None}
-    seconds_per_beat = np.median(
-        [
-            duration(j) / score[i].beats
-            for i, j in matched.items()
-            if score_midi[i] == played_midi[j]
-        ]
-    )
+    played_right = [
+        duration(j) / score[i].beats for i, j in matched.items() if score_midi[i] == played_midi[j]
+    ]
+    if not played_right:
+        return mistakes  # no right note at all: no tempo to judge the durations with
+    seconds_per_beat = np.median(played_right)
     run_of = {i: run for _, run in runs(score_midi) for i in run}
 
     # Same pitch as a neighbouring score note: the played note belongs to that run.

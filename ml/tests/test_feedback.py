@@ -66,6 +66,11 @@ def test_really_extra_repeated_note_is_a_mistake():
     assert [m.kind for m in detect_mistakes(score, played)] == ["extra"]
 
 
+def test_nothing_right_keeps_all_mistakes():
+    score = quarters(60, 62)
+    assert [m.kind for m in detect_mistakes(score, [])] == ["missed", "missed"]
+
+
 def test_score_mistakes():
     truth = [Mistake("wrong", 3, 60), Mistake("missed", 10, 62), Mistake("extra", 20, 64)]
     detected = [
