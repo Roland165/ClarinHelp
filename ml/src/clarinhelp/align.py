@@ -23,7 +23,7 @@ def align(expected, played, substitution_cost=1):
         return 0 if expected[i] == played[j] else substitution_cost
 
     # cost[i, j] = changes needed to turn expected[:i] into played[:j]
-    cost = np.zeros((n + 1, m + 1), dtype=int)
+    cost = np.zeros((n + 1, m + 1))
     cost[:, 0] = np.arange(n + 1)
     cost[0, :] = np.arange(m + 1)
     for i in range(1, n + 1):
