@@ -107,3 +107,41 @@ main {
 .error {
   color: #d33;
 }
+
+.practice {
+  margin-top: 2.5rem;
+}
+
+.practice-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.recording {
+  color: #d64545;
+}
+
+.take-summary {
+  margin-top: 1rem;
+}
+
+.take-summary .in-tune {
+  color: #2e9e5b;
+}
+
+.take-summary .close {
+  color: #e0a100;
+}
+
+.take-summary .wrong {
+  color: #d64545;
+}
+
+/* OSMD draws in black: keep a white sheet, also in dark mode. */
+.score-sheet {
+  margin-top: 1rem;
+  border-radius: 4px;
+  background: #fff;
+}

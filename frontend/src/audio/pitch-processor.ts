@@ -10,8 +10,10 @@ declare class AudioWorkletProcessor {
 }
 declare function registerProcessor(name: string, processor: unknown): void
 declare const sampleRate: number
+declare const currentTime: number
 
 export interface PitchFrame {
+  time: number // s, since the microphone was opened
   rms: number
   frequency: number | null // null = nothing periodic (silence, breath, noise)
   confidence: number
@@ -49,6 +51,7 @@ class PitchProcessor extends AudioWorkletProcessor {
 
     const pitch = yin(this.buffer, { sampleRate })
     return {
+      time: currentTime,
       rms: Math.sqrt(sumOfSquares / FRAME_SIZE),
       frequency: pitch?.frequency ?? null,
       confidence: pitch?.confidence ?? 0,

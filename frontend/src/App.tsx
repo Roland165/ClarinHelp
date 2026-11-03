@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { startPitchTracker, type PitchFrame } from './audio/mic'
-import { Score } from './components/Score'
+import { Practice } from './components/Practice'
 import { Tuner } from './components/Tuner'
 import { toDb } from './lib/level'
 import { PitchSmoother } from './lib/smoothing'
@@ -73,7 +73,7 @@ function App() {
           : '–'}
       </p>
 
-      <Score />
+      <Practice />
     </main>
   )
 }

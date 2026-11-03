@@ -1,25 +1,58 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import type { Note, OpenSheetMusicDisplay } from 'opensheetmusicdisplay'
+import type { ScoreNote } from '../lib/feedback'
+import type { NoteStatus } from '../lib/take'
 
 // Scores are generated from data/scores/*.abc by ml/scripts/export_musicxml.py.
-const SCORES_URL = `${import.meta.env.BASE_URL}scores`
+export const SCORES_URL = `${import.meta.env.BASE_URL}scores`
 
-interface Tune {
-  id: string
-  title: string
+const NOTE_COLORS: Record<NoteStatus, string> = {
+  'in-tune': '#2e9e5b',
+  close: '#e0a100',
+  wrong: '#d64545',
+  missed: '#d64545',
+}
+const DEFAULT_COLOR = '#000000'
+
+interface ScoreProps {
+  tuneId: string
+  statuses: NoteStatus[] | null // one per score note, null = no colors
+  onLoaded: (notes: ScoreNote[]) => void
+  onError: (message: string) => void
 }
 
-export function Score() {
-  const [tunes, setTunes] = useState<Tune[]>([])
-  const [tuneId, setTuneId] = useState('au_clair')
-  const [error, setError] = useState<string | null>(null)
-  const container = useRef<HTMLDivElement>(null)
+/** Walk through the score. A tied note counts once, but all its parts get its color. */
+function readScore(osmd: OpenSheetMusicDisplay) {
+  const notes: ScoreNote[] = []
+  const graphics: Note[][] = []
+  const cursor = osmd.cursor
+  cursor.reset()
+  while (!cursor.Iterator.EndReached) {
+    for (const note of cursor.NotesUnderCursor()) {
+      if (note.isRest()) continue
+      // Length is a fraction of a whole note.
+      const beats = note.Length.RealValue * 4
+      if (note.NoteTie && note.NoteTie.StartNote !== note) {
+        notes[notes.length - 1].beats += beats
+        graphics[graphics.length - 1].push(note)
+      } else {
+        // OSMD counts half tones from one octave below MIDI.
+        const midi = note.halfTone + 12
+        notes.push({ bar: cursor.Iterator.CurrentMeasureIndex + 1, midi, beats })
+        graphics.push([note])
+      }
+    }
+    cursor.next()
+  }
+  cursor.reset()
+  cursor.hide()
+  return { notes, graphics }
+}
 
-  useEffect(() => {
-    fetch(`${SCORES_URL}/index.json`)
-      .then((response) => response.json())
-      .then(setTunes)
-      .catch((err) => setError(String(err)))
-  }, [])
+export function Score({ tuneId, statuses, onLoaded, onError }: ScoreProps) {
+  const container = useRef<HTMLDivElement>(null)
+  const osmdRef = useRef<OpenSheetMusicDisplay | null>(null)
+  const graphics = useRef<Note[][]>([])
 
   useEffect(() => {
     const element = container.current
@@ -31,37 +64,40 @@ export function Score() {
       // so the tuner still opens instantly.
       const { OpenSheetMusicDisplay } = await import('opensheetmusicdisplay')
       if (cancelled) return
-      element.innerHTML = ''
-      const osmd = new OpenSheetMusicDisplay(element, {
+      // Only one instance: each one keeps listening to window resizes and redraws itself.
+      osmdRef.current ??= new OpenSheetMusicDisplay(element, {
         autoResize: true,
         drawPartNames: false,
         // music21 writes the title twice (work and movement title).
         drawSubtitle: false,
       })
+      const osmd = osmdRef.current
       await osmd.load(`${SCORES_URL}/${tuneId}.musicxml`)
-      if (!cancelled) osmd.render()
+      if (cancelled) return
+      graphics.current = []
+      osmd.render()
+      const score = readScore(osmd)
+      graphics.current = score.graphics
+      onLoaded(score.notes)
     }
 
-    draw(element).catch((err) => setError(String(err)))
+    draw(element).catch((err) => onError(String(err)))
     return () => {
       cancelled = true
     }
-  }, [tuneId])
+  }, [tuneId, onLoaded, onError])
 
-  return (
-    <section className="score">
-      <label>
-        Tune{' '}
-        <select value={tuneId} onChange={(event) => setTuneId(event.target.value)}>
-          {tunes.map((tune) => (
-            <option key={tune.id} value={tune.id}>
-              {tune.title}
-            </option>
-          ))}
-        </select>
-      </label>
-      {error && <p className="error">Could not show the score: {error}</p>}
-      <div ref={container} />
-    </section>
-  )
+  useEffect(() => {
+    const osmd = osmdRef.current
+    if (!osmd) return
+    graphics.current.forEach((parts, i) => {
+      const status = statuses?.[i]
+      for (const note of parts) note.NoteheadColor = status ? NOTE_COLORS[status] : DEFAULT_COLOR
+    })
+    osmd.render()
+    // Rendering again puts the cursor back: it stays hidden until we follow the player.
+    osmd.cursor.hide()
+  }, [statuses])
+
+  return <div ref={container} className="score-sheet" />
 }
