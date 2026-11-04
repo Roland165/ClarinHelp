@@ -21,4 +21,12 @@ uv run python scripts/prefill_labels.py
 
 # compare label files with the scores (useful after editing labels by hand)
 uv run python scripts/check_labels.py
+
+# evaluate YIN: against the annotations, against CREPE, and on finding mistakes
+uv run python scripts/eval_transcription.py
+uv run python scripts/compare_pitch.py
+uv run python scripts/eval_feedback.py
+
+# convert the ABC scores for the web app (run again after editing one)
+uv run python scripts/export_musicxml.py
 ```

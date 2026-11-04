@@ -2,9 +2,14 @@
 
 A practice companion for beginner clarinettists, running in the browser.
 
-## Current state: a real-time tuner
+## Current state: a tuner, and feedback on a whole tune
 
-Play a note and ClarinHelp shows the written note for a B♭ clarinet and a needle showing how many cents you are off. Green within ±5 cents, orange within ±15, red beyond. Just like a real tuner
+**Tuner.** Play a note and ClarinHelp shows the written note for a B♭ clarinet and a needle showing how many cents you are off. Green within ±5 cents, orange within ±15, red beyond. Just like a real tuner
+
+**Practice.** Choose a tune, press Record, play it, press Stop: every note of the score
+is colored (green: in tune, orange: more than 25 cents off, red: wrong or missed) and
+the mistakes are listed. For now the feedback comes at the end of the take, and the
+take has to start at the beginning of the tune.
 
 How it works:
 
@@ -45,6 +50,12 @@ the sustained part of every note of the validation recordings (16 files, 9,975 f
 CREPE itself is only precise to about 5 cents (measured on pure tones), so the two
 agree within the precision of the reference. Reproduce with
 `uv run python scripts/compare_pitch.py` in `ml/`.
+
+Finding the mistakes, on the 14 tune takes of the validation set (15 deliberate
+mistakes, in the 4 errors takes): 14 found, 2 false alarms. These rules were tuned on
+these same tunes and 15 mistakes is few, so these numbers are optimistic; the final
+ones will come from the test tunes. Reproduce with
+`uv run python scripts/eval_feedback.py` in `ml/`.
 
 ## Running locally
 
