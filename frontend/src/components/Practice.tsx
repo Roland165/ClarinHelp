@@ -85,6 +85,9 @@ export function Practice() {
               extra
             </span>
           </p>
+          {result.stoppedAtBar !== null && (
+            <p>Stopped at bar {result.stoppedAtBar}: the rest of the tune is not judged.</p>
+          )}
           {result.messages.length > 0 && (
             <ul>
               {result.messages.map((message) => (

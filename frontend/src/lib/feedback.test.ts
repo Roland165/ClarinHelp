@@ -76,7 +76,18 @@ describe('compareTake', () => {
     expect(kinds(quarters(62, 60, 64, 65), take)).toEqual(['extra'])
   })
 
-  it('reports everything as missed when nothing was played', () => {
-    expect(kinds(quarters(60, 62), [])).toEqual(['missed', 'missed'])
+  it('does not blame the notes after the player stopped', () => {
+    // The tune repeats C D E: playing it once is the start, not the end.
+    const take = played([60, 0.5], [62, 0.5], [64, 0.5])
+    const result = compareTake(quarters(60, 62, 64, 60, 62, 64), take)
+    expect(result.mistakes).toEqual([])
+    expect(result.reached).toBe(3)
+    expect(result.playedOf).toEqual([0, 1, 2, null, null, null])
+  })
+
+  it('reaches nothing when nothing was played', () => {
+    const result = compareTake(quarters(60, 62), [])
+    expect(result.mistakes).toEqual([])
+    expect(result.reached).toBe(0)
   })
 })

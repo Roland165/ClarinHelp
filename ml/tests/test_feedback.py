@@ -66,9 +66,18 @@ def test_really_extra_repeated_note_is_a_mistake():
     assert [m.kind for m in detect_mistakes(score, played)] == ["extra"]
 
 
+def test_stopping_early_is_not_a_mistake():
+    # The tune repeats C D E: playing it once is the start, not the end.
+    score = quarters(60, 62, 64, 60, 62, 64)
+    assert detect_mistakes(score, played_notes((60, 0.5), (62, 0.5), (64, 0.5))) == []
+    assert detect_mistakes(score, []) == []
+
+
 def test_nothing_right_keeps_all_mistakes():
+    # No right note: no tempo to judge durations with, the mistakes stay as they are.
     score = quarters(60, 62)
-    assert [m.kind for m in detect_mistakes(score, [])] == ["missed", "missed"]
+    played = played_notes((61, 0.5), (63, 0.5))
+    assert [m.kind for m in detect_mistakes(score, played)] == ["extra", "extra"]
 
 
 def test_score_mistakes():

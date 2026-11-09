@@ -8,7 +8,15 @@
 // [null, j]: played[j] is an extra note
 export type AlignedPair = [number | null, number | null]
 
-export function align(expected: number[], played: number[], substitutionCost = 1): AlignedPair[] {
+// With freeEnd, the player may have stopped before the end: the rest of the expected
+// sequence costs nothing and does not appear in the pairs. So when the tune repeats
+// itself, what was played stays at the start, where it costs nothing.
+export function align(
+  expected: number[],
+  played: number[],
+  substitutionCost = 1,
+  freeEnd = false,
+): AlignedPair[] {
   const n = expected.length
   const m = played.length
   const matchCost = (i: number, j: number) => (expected[i] === played[j] ? 0 : substitutionCost)
@@ -27,9 +35,16 @@ export function align(expected: number[], played: number[], substitutionCost = 1
     }
   }
 
+  // Among equal costs, go as far as possible: "C D, merged D, C" is better than
+  // "C D, extra C, stopped before the end".
+  let end = n
+  if (freeEnd) {
+    for (let k = 0; k <= n; k++) if (cost[k][m] <= cost[end][m]) end = k
+  }
+
   // Walk back from the end to recover which choice was made at each step.
   const pairs: AlignedPair[] = []
-  let i = n
+  let i = end
   let j = m
   while (i > 0 || j > 0) {
     if (i > 0 && j > 0 && cost[i][j] === cost[i - 1][j - 1] + matchCost(i - 1, j - 1)) {

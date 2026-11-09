@@ -7,7 +7,7 @@ expected sequence into the played one, and says which note matches which.
 import numpy as np
 
 
-def align(expected, played, substitution_cost=1):
+def align(expected, played, substitution_cost=1, free_end=False):
     """Return a list of (i, j) pairs, in order.
 
     (i, j): expected[i] matches played[j] (same note or substitution)
@@ -16,6 +16,10 @@ def align(expected, played, substitution_cost=1):
 
     With substitution_cost > 2, a substitution always costs more than deleting one
     note and inserting another, so only equal notes are ever matched.
+
+    With free_end, the player may have stopped before the end: the rest of the
+    expected sequence costs nothing and does not appear in the pairs. So when the
+    tune repeats itself, what was played stays at the start, where it costs nothing.
     """
     n, m = len(expected), len(played)
 
@@ -34,9 +38,13 @@ def align(expected, played, substitution_cost=1):
                 cost[i, j - 1] + 1,
             )
 
+    # Among equal costs, go as far as possible: "C D, merged D, C" is better than
+    # "C D, extra C, stopped before the end". Hence argmin on the reversed column.
+    end = n - int(np.argmin(cost[::-1, m])) if free_end else n
+
     # Walk back from the end to recover which choice was made at each step.
     pairs = []
-    i, j = n, m
+    i, j = end, m
     while i > 0 or j > 0:
         if i > 0 and j > 0 and cost[i, j] == cost[i - 1, j - 1] + match_cost(i - 1, j - 1):
             pairs.append((i - 1, j - 1))

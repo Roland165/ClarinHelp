@@ -16,7 +16,7 @@ const DEFAULT_COLOR = '#000000'
 
 interface ScoreProps {
   tuneId: string
-  statuses: NoteStatus[] | null // one per score note, null = no colors
+  statuses: (NoteStatus | null)[] | null // one per score note, null = no color
   onLoaded: (notes: ScoreNote[]) => void
   onError: (message: string) => void
 }

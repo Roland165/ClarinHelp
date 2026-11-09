@@ -9,9 +9,10 @@ import { concertToWritten, hzToMidi, midiToName } from './pitch'
 export type NoteStatus = 'in-tune' | 'close' | 'wrong' | 'missed'
 
 export interface TakeResult {
-  statuses: NoteStatus[] // one per score note
+  statuses: (NoteStatus | null)[] // one per score note, null = not played (stopped before)
   messages: string[] // the mistakes, in words
   counts: Record<NoteStatus | 'extra', number>
+  stoppedAtBar: number | null // null if the take went to the end of the tune
 }
 
 // Wider than the tuner (5 cents): this judges a whole note played by a beginner,
@@ -24,9 +25,10 @@ export function analyzeTake(frames: PitchFrame[], score: ScoreNote[]): TakeResul
     frame.frequency === null ? null : concertToWritten(hzToMidi(frame.frequency)),
   )
   const played = segmentNotes(times, written, frames.map((frame) => toDb(frame.rms)))
-  const { mistakes, playedOf } = compareTake(score, played)
+  const { mistakes, reached, playedOf } = compareTake(score, played)
 
-  const statuses = score.map((note, i): NoteStatus => {
+  const statuses = score.map((note, i): NoteStatus | null => {
+    if (i >= reached) return null
     const j = playedOf[i]
     if (j === null) return 'missed'
     const cents = medianCents(played[j], note.midi, times, written)
@@ -46,9 +48,10 @@ export function analyzeTake(frames: PitchFrame[], score: ScoreNote[]): TakeResul
   })
 
   const counts = { 'in-tune': 0, close: 0, wrong: 0, missed: 0, extra: 0 }
-  for (const status of statuses) counts[status]++
+  for (const status of statuses) if (status) counts[status]++
   counts.extra = mistakes.filter((mistake) => mistake.kind === 'extra').length
-  return { statuses, messages, counts }
+  const stoppedAtBar = reached < score.length && reached > 0 ? score[reached - 1].bar : null
+  return { statuses, messages, counts, stoppedAtBar }
 }
 
 /** How far a played note is from the score note, over its middle half (no attack, no release). */

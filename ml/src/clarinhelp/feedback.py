@@ -58,7 +58,8 @@ def detect_mistakes(score, played):
     """
     score_midi = [note.midi for note in score]
     played_midi = [midi for _, _, midi in played]
-    pairs = align(score_midi, played_midi, substitution_cost=SUBSTITUTION_COST)
+    # The player may stop before the end: the notes not reached are not mistakes.
+    pairs = align(score_midi, played_midi, substitution_cost=SUBSTITUTION_COST, free_end=True)
     mistakes, extra_played = mistakes_from_pairs(pairs, score_midi, played_midi)
 
     def duration(j):

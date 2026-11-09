@@ -19,6 +19,9 @@ export interface Mistake {
 
 export interface Comparison {
   mistakes: Mistake[]
+  // How many score notes the take went through. The player may stop before the end:
+  // the notes after that are not mistakes, they were just not played.
+  reached: number
   // For each score note, the played note that covers it, or null if there is none.
   // Repeated notes merged into one long note all point to that note.
   playedOf: (number | null)[]
@@ -73,8 +76,9 @@ function median(values: number[]): number {
 export function compareTake(score: ScoreNote[], played: PlayedNote[]): Comparison {
   const scoreMidi = score.map((note) => note.midi)
   const playedMidi = played.map((note) => note.midi)
-  const pairs = align(scoreMidi, playedMidi, SUBSTITUTION_COST)
+  const pairs = align(scoreMidi, playedMidi, SUBSTITUTION_COST, true)
   const mistakes = mistakesFromPairs(pairs, scoreMidi, playedMidi)
+  const reached = Math.max(0, ...pairs.map(([i]) => (i === null ? 0 : i + 1)))
 
   const duration = (j: number) => played[j].end - played[j].start
   const matched = new Map<number, number>()
@@ -85,7 +89,7 @@ export function compareTake(score: ScoreNote[], played: PlayedNote[]): Compariso
     .filter(([i, j]) => scoreMidi[i] === playedMidi[j])
     .map(([i, j]) => duration(j) / score[i].beats)
   // No right note at all: no tempo to judge the durations with.
-  if (playedRight.length === 0) return { mistakes, playedOf }
+  if (playedRight.length === 0) return { mistakes, reached, playedOf }
   const secondsPerBeat = median(playedRight)
 
   const runs = runsOf(scoreMidi)
@@ -136,7 +140,7 @@ export function compareTake(score: ScoreNote[], played: PlayedNote[]): Compariso
     }
   }
 
-  return { mistakes: mistakes.filter((_, index) => !ignored.has(index)), playedOf }
+  return { mistakes: mistakes.filter((_, index) => !ignored.has(index)), reached, playedOf }
 }
 
 /** The played note of the closest repeated note that has one. */

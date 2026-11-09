@@ -64,7 +64,14 @@ describe('analyzeTake', () => {
     expect(result.counts.extra).toBe(1)
   })
 
-  it('marks everything as missed when nothing was played', () => {
-    expect(analyzeTake([], score).statuses).toEqual(['missed', 'missed', 'missed', 'missed'])
+  it('leaves the notes after the stop uncolored', () => {
+    const result = analyzeTake(take(SILENCE, [60, 0, 0.5], [62, 0, 0.5], SILENCE), score)
+    expect(result.statuses).toEqual(['in-tune', 'in-tune', null, null])
+    expect(result.messages).toEqual([])
+    expect(result.stoppedAtBar).toBe(2)
+  })
+
+  it('colors nothing when nothing was played', () => {
+    expect(analyzeTake([], score).statuses).toEqual([null, null, null, null])
   })
 })
