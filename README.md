@@ -6,10 +6,10 @@ A practice companion for beginner clarinettists, running in the browser.
 
 **Tuner.** Play a note and ClarinHelp shows the written note for a B♭ clarinet and a needle showing how many cents you are off. Green within ±5 cents, orange within ±15, red beyond. Just like a real tuner
 
-**Practice.** Choose a tune, press Record, play it, press Stop: every note of the score
-is colored (green: in tune, orange: more than 25 cents off, red: wrong or missed) and
-the mistakes are listed. For now the feedback comes at the end of the take, and the
-take has to start at the beginning of the tune.
+**Practice.** Choose a tune, press Record and play: a cursor follows you on the score,
+and every note gets its color as you go (green: in tune, orange: more than 25 cents
+off, red: wrong or missed), with the mistakes listed in words. You can stop anywhere;
+for now the take has to start at the beginning of the tune.
 
 How it works:
 

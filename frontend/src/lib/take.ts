@@ -12,6 +12,7 @@ export interface TakeResult {
   statuses: (NoteStatus | null)[] // one per score note, null = not played (stopped before)
   messages: string[] // the mistakes, in words
   counts: Record<NoteStatus | 'extra', number>
+  reached: number // how many score notes the take went through
   stoppedAtBar: number | null // null if the take went to the end of the tune
 }
 
@@ -51,7 +52,7 @@ export function analyzeTake(frames: PitchFrame[], score: ScoreNote[]): TakeResul
   for (const status of statuses) if (status) counts[status]++
   counts.extra = mistakes.filter((mistake) => mistake.kind === 'extra').length
   const stoppedAtBar = reached < score.length && reached > 0 ? score[reached - 1].bar : null
-  return { statuses, messages, counts, stoppedAtBar }
+  return { statuses, messages, counts, reached, stoppedAtBar }
 }
 
 /** How far a played note is from the score note, over its middle half (no attack, no release). */

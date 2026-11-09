@@ -9,7 +9,11 @@ interface Tune {
   title: string
 }
 
-/** Choose a tune, play it, and see each note colored on the score. */
+// While playing, the whole take is analysed again every 5 frames (~100 ms): fast
+// enough for the cursor to follow, cheap enough for the page to stay smooth.
+const LIVE_EVERY_FRAMES = 5
+
+/** Choose a tune, play it, and see the cursor follow you and each note get its color. */
 export function Practice() {
   const [tunes, setTunes] = useState<Tune[]>([])
   const [tuneId, setTuneId] = useState('au_clair')
@@ -19,6 +23,13 @@ export function Practice() {
   const [error, setError] = useState<string | null>(null)
   const frames = useRef<PitchFrame[]>([])
   const stopMic = useRef<(() => void) | null>(null)
+
+  function onFrame(frame: PitchFrame) {
+    frames.current.push(frame)
+    if (frames.current.length % LIVE_EVERY_FRAMES === 0) {
+      setResult(analyzeTake(frames.current, score))
+    }
+  }
 
   useEffect(() => {
     fetch(`${SCORES_URL}/index.json`)
@@ -37,7 +48,7 @@ export function Practice() {
     setResult(null)
     frames.current = []
     try {
-      stopMic.current = await startPitchTracker((frame) => frames.current.push(frame))
+      stopMic.current = await startPitchTracker(onFrame)
       setRecording(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
@@ -69,7 +80,7 @@ export function Practice() {
           </select>
         </label>
         <button onClick={recording ? stop : record}>{recording ? 'Stop' : 'Record'}</button>
-        {recording && <span className="recording">Recording… play the whole tune</span>}
+        {recording && <span className="recording">Recording… start from the beginning</span>}
       </div>
       {error && <p className="error">{error}</p>}
 
@@ -85,7 +96,7 @@ export function Practice() {
               extra
             </span>
           </p>
-          {result.stoppedAtBar !== null && (
+          {!recording && result.stoppedAtBar !== null && (
             <p>Stopped at bar {result.stoppedAtBar}: the rest of the tune is not judged.</p>
           )}
           {result.messages.length > 0 && (
@@ -101,6 +112,8 @@ export function Practice() {
       <Score
         tuneId={tuneId}
         statuses={result?.statuses ?? null}
+        // On the note being played: the last one the take reached.
+        cursorAt={recording ? Math.max(0, (result?.reached ?? 0) - 1) : null}
         onLoaded={setScore}
         onError={setError}
       />
